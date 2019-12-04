@@ -20,6 +20,7 @@ let menuItems = [
 
 function createMenuComponent(arr) {
   const menuComponent = document.createElement("div");
+  menuComponent.classList.add("menu");
   const itemList = document.createElement("ul");
   // Step 2: Inside this function, iterate over the array creating a list item <li> element for each item in the array. 
   // Add those items to the <ul>
