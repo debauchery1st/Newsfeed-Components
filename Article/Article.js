@@ -103,38 +103,63 @@ const data = [
   //  Hint: You will need to use createElement more than once here!
   //  Your function should take either an object as it's one argument, or 5 separate arguments mapping to each piece of the data object above.
   
-function createArticle(t, d, p1, p2, p3){
+function createArticle(articleContent, compressText='\u25b2', expandText='\u25bc') {
   // ** create **
   article = document.createElement("div");
   title = document.createElement('h2');
-  date = document.createTextNode('p');
-  paragraph1 = document.createElement('p');
-  paragraph2 = document.createElement('p');
-  paragraph3 = document.createElement('p');
+  date = document.createElement('p');
+  firstParagraph = document.createElement('p');
+  secondParagraph = document.createElement('p');
+  thirdParagraph = document.createElement('p');
   expandButton = document.createElement('span');
   // ** assign **
   expandButton.classList.add('expandButton');
   date.classList.add('date');
   article.classList.add('article');
-  title.textContent = t;
-  date.textContent = d;
-  paragraph1.textContent = p1;
-  paragraph2.textContent = p2;
-  paragraph3.textContent = p3;
+  title.textContent = articleContent.title;
+  date.textContent = articleContent.date;
+  firstParagraph.textContent = articleContent.firstParagraph;
+  secondParagraph.textContent = articleContent.secondParagraph;
+  thirdParagraph.textContent = articleContent.thirdParagraph;
+  expandButton.textContent = expandText;
+  expandButton.style.scr
   // ** assemble **
   article.appendChild(title);
   article.appendChild(date);
-  article.appendChild(paragraph1);
-  article.appendChild(paragraph2);
-  article.appendChild(paragraph3);
+  article.appendChild(firstParagraph);
+  article.appendChild(secondParagraph);
+  article.appendChild(thirdParagraph);
+  article.appendChild(expandButton);
   // Step 2: Add an event listener to the expandButton span. This event listener should toggle the class 'article-open' on the 'article' div.
-  expandButton.addEventListener('click', event => article.classList.toggle('article-open'));
+  expandButton.addEventListener('click', event => {
+    const parentArticle = event.target.parentElement;
+    const btn = event.target;
+    parentArticle.classList.toggle('article-open');
+    btn.textContent = (btn.textContent === expandText) ? compressText:expandText;
+  });
   // ** deploy **
   // Step 3: return the entire component.
   return article;
 }
- 
-  // Step 4: Map over the data, creating a component for each oject and add each component to the DOM as children of the 'articles' div.
 
-  // Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
+// Step 4: Map over the data, creating a component for each oject and add each component to the DOM as children of the 'articles' div.
 
+  const newsArticles = data.map((item) => createArticle({
+  title: item.title,
+  date: item.date,
+  firstParagraph: item.firstParagraph,
+  secondParagraph: item.secondParagraph,
+  thirdParagraph: item.thirdParagraph}));
+
+// Step 5: Add a new article to the array. Make sure it is in the same format as the others. Refresh the page to see the new article.
+
+  newsArticles.push(createArticle({
+  title: "Components I",
+  date: "today",
+  firstParagraph: "As we build larger and more feature rich web pages, we may notice a trend in our code; elements that are essentially using the same functionality and styling with minor differences in the data they present. In an effort to keep our code readable, reusable, and most of all DRY, we can build on these repeating patterns and create components. Components are reusable pieces of code that can be used to build elements sharing functionality and styling. Components are the heart of any dynamic web application and JavaScript framework.",
+  secondParagraph: "JavaScript is used to consume the data and output the content into the DOM. JavaScript’s involvement in components is the glue that ties everything together. We can use Javascript to consume the HTML and return a component version of it! The how-to of JavaScript will be explained in greater detail throughout the rest of our objectives.",
+  thirdParagraph: "Sometimes it makes sense to build several elements with similar functionality. Perhaps lots of components have click handlers that use the same callback, or a group of components shares the same style. This verbosity can be frustrating, but thankfully, it isn’t necessary to repeat yourself in code. Utilizing a Javascript function, we can create dynamic components on the fly and add them to the DOM."
+}));
+
+const newsPaper = document.querySelector('.articles');
+newsArticles.forEach((newsArticle) => newsPaper.appendChild(newsArticle));
